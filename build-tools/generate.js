@@ -3,15 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
 
-function cleanOutputDir() {
-  try {
-    const files = fs.readdirSync(config.outputPath);
-    files.forEach((path) => fs.rmSync(path));
-    console.log('delete success ');
-  } catch (e) {
-    console.log('delete failed, reason: \n', e.toString());
-  }
-}
 
 function getAssets() {
   const assetList = fs.readdirSync(config.assetsPath).map(name => path.join(config.assetsPath, name));
@@ -53,26 +44,45 @@ function getFileNameAndExt(context) {
  */
 function NormalizationName(name) {
   if (!name) throw new Error('invalid input, normalize name should input non-null value');
-  let normalizeName = name.replace(/\\_(\\w)/g, (all, letter) => letter.toUpperCase())
-
+  let normalizeName = name.replace(/[-|\\_](\w)/g, (all, letter) => letter.toUpperCase());
   normalizeName = normalizeName[0].toUpperCase() + normalizeName.slice(1);
-
   return normalizeName;
 }
 
 function generateValuesFile() {
   const assetList = getAssets();
-  const AssetMetaList = assetList.map(getFileMeta).filter(({ext}) => ext.toLowerCase() !== 'svg');
+  const AssetMetaList = assetList.map(getFileMeta).filter(({ext}) => ext.toLowerCase() === 'svg');
 
+  let normalizationName = NormalizationName(config.componentClassPrefix + 'IconAssets');
   const template = `
-    import {ReactNode} from "react";
+    import React, {HTMLAttributes} from "react";
+    import classnames from 'classnames';
+    import '${config.cssPath}';
     ${AssetMetaList.map(({path: p, variableName}) =>
-      `import ${variableName} from '${path.relative(config.outputPath, p)}'`
-    )}
+      `import ${variableName} from '${path.relative(config.outputPath, p).replace(/\\/g, '/')}';\n`
+    ).reduce((text, value) => text + value, '')}
     
-    export const ${NormalizationName(config.componentClassPrefix + 'IconAssets')}: Record<string, ReactNode> = {
-      ${AssetMetaList.map(({variableName, name}) => `${name}: ${variableName},\n`)}
+    function CreateIconComponent(Component: React.FunctionComponent) {
+      return React.forwardRef<HTMLSpanElement>( (props: HTMLAttributes<HTMLSpanElement>, ref) => {
+        const {className, ...otherProps} = props;
+        return (
+          <span {...otherProps} className={classnames(
+            className,
+          )} ref={ref}> 
+            <Component />   
+          </span>
+        )
+      })
     }
+    
+    const ${normalizationName} = {
+      ${AssetMetaList
+        .map(({variableName, name}) => `${variableName}: CreateIconComponent(${variableName}),\n`)
+        .reduce((text, value) => text + value, '')
+      }
+    }
+    
+    export default {${normalizationName}};
   `;
   return template;
 }
@@ -81,7 +91,17 @@ function generateValuesFile() {
 
 ;(function main() {
   const assets = getAssets();
+  // clear output
+  try {
+    const outputFile = fs.readFileSync(config.outputPath);
+    console.log('output file exist, wait for delete');
+    fs.unlinkSync(config.outputPath);
+    console.log('output file delete success');
+  } catch (e) {}
+
+  console.log('start generate output ');
   const iconValueFileContent = generateValuesFile(assets[0]);
 
-  console.log(iconValueFileContent);
+  fs.writeFileSync(config.outputPath, iconValueFileContent);
+  console.log('success');
 })()

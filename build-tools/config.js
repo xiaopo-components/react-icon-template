@@ -1,10 +1,10 @@
 const path = require('path');
 
-const resolveSrcPath = (relativePath) => path.join('../src', relativePath);
+const resolveAppPath = (relativePath) => path.resolve(__dirname, '../src', relativePath);
 
 module.exports = {
   componentClassPrefix: 'x-',
-  cssPath: resolveSrcPath('index.css'),
-  assetsPath: resolveSrcPath('assets'),
-  outputPath: resolveSrcPath('icon'),
+  cssPath: path.relative('../src', '../src/index.css'),
+  assetsPath: resolveAppPath('assets'),
+  outputPath: resolveAppPath('index.tsx'),
 }

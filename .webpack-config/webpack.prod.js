@@ -1,18 +1,16 @@
 const WebpackMerge = require('webpack-merge');
 const base = require('./webpack.base');
-const webpack = require('webpack');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = WebpackMerge.merge(base, {
-  entry: [
-    "index.ts",
-  ].map(p => path.join(__dirname, `../lib/${p}`)),
+  mode: 'production',
+  entry: path.join(__dirname, `../src/index.tsx`),
   output: {
     path: path.join(__dirname, "../dist/"),
     filename: "index.js",
-    library: 'react-components',
+    library: '@x-component/icon',
     libraryTarget: 'umd', // 采用通用模块定义
   },
 

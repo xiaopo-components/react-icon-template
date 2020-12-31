@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './lib/index.ts',
+  entry: path.join(__dirname, `../src/index.tsx`),
   target: 'web',
   output: {
     filename: 'bundle.[fullhash].js',
@@ -12,67 +12,29 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader']
-      },
-      {
-        test: /\.js[x]?$/,
-        use:  {
-          loader: require.resolve('babel-loader'),
-          options: {
-            presets: ['@babel/preset-env','@babel/preset-react'],
-            plugins: [
-              require.resolve('react-refresh/babel')
-            ].filter(Boolean),
-          },
-        },
-        exclude: /node_modules/
+        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.ts[x]?$/,
         use: [
-          {
-            loader: require.resolve('babel-loader'),
-            options: {
-              presets: ['@babel/preset-env','@babel/preset-react','@babel/preset-typescript'],
-              plugins: [
-                require.resolve('react-refresh/babel')
-              ].filter(Boolean),
-            },
-          },
-          {
-            loader: require.resolve('ts-loader'),
-            options: {
-              transpileOnly: true,
-            },
-          },
+          'babel-loader',
+          'ts-loader'
         ],
         exclude: /node_modules/
       },
       {
         test: /\.svg$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 10000,
-            },
-          },
-        ],
+        include: path.resolve(__dirname, '../src/assets'),
+        use: ['@svgr/webpack'],
       }
     ]
   },
   resolve: {
     extensions: [
-      'web.mjs',
-      'mjs',
-      'web.js',
       'js',
-      'web.ts',
       'ts',
-      'web.tsx',
       'tsx',
       'json',
-      'web.jsx',
       'jsx',
     ].map(e => `.${e}`)
   },
