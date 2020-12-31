@@ -16,23 +16,47 @@ module.exports = {
       },
       {
         test: /\.js[x]?$/,
-        use: 'babel-loader',
+        use:  {
+          loader: require.resolve('babel-loader'),
+          options: {
+            presets: ['@babel/preset-env','@babel/preset-react'],
+            plugins: [
+              require.resolve('react-refresh/babel')
+            ].filter(Boolean),
+          },
+        },
         exclude: /node_modules/
       },
       {
         test: /\.ts[x]?$/,
         use: [
-          'babel-loader',
-          'ts-loader'
+          {
+            loader: require.resolve('babel-loader'),
+            options: {
+              presets: ['@babel/preset-env','@babel/preset-react','@babel/preset-typescript'],
+              plugins: [
+                require.resolve('react-refresh/babel')
+              ].filter(Boolean),
+            },
+          },
+          {
+            loader: require.resolve('ts-loader'),
+            options: {
+              transpileOnly: true,
+            },
+          },
         ],
         exclude: /node_modules/
       },
       {
-        test: /\.less$/,
+        test: /\.svg$/,
         use: [
-          'style-loader',
-          {loader: 'css-loader', options: {importLoaders: 1}},
-          'less-loader'
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+            },
+          },
         ],
       }
     ]
