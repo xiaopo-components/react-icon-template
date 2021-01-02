@@ -53,14 +53,35 @@ function generateValuesFile() {
   const assetList = getAssets();
   const AssetMetaList = assetList.map(getFileMeta).filter(({ext}) => ext.toLowerCase() === 'svg');
 
-  let normalizationName = NormalizationName(config.componentClassPrefix + 'IconAssets');
+  let ExportName = NormalizationName(config.componentClassPrefix + 'IconAssets');
+
+  function getRelativePath(p) {
+    return path.relative(config.outputPath, p).replace(/\\/g, '/');
+  }
+
+  function generateObjectCode(value) {
+    return `{
+      ${Object.entries(value).reduce((p, [key, value]) => p += `${key}: ${value},\n`, '')}
+    \n}`
+  }
+
+  const AssetsImportStatement = AssetMetaList.map(({path: p, variableName}) =>
+    `import ${variableName} from '${getRelativePath(p)}';`
+  );
+
+  const CssImports = [
+    `import '${config.cssPath}'`,
+  ]
+
+  const ExportValue = AssetMetaList
+    .map(({variableName, name}) => ({[variableName]: `CreateIconComponent(${variableName})`}))
+    .reduce(((previousValue, currentValue) => Object.assign(previousValue, currentValue)), {})
+
   const template = `
     import React, {HTMLAttributes} from "react";
     import classnames from 'classnames';
-    import '${config.cssPath}';
-    ${AssetMetaList.map(({path: p, variableName}) =>
-      `import ${variableName} from '${path.relative(config.outputPath, p).replace(/\\/g, '/')}';\n`
-    ).reduce((text, value) => text + value, '')}
+    
+    ${[...AssetsImportStatement, ...CssImports].reduce((text, value) => text += value + '\n', '')}
     
     function CreateIconComponent(Component: React.FunctionComponent) {
       return React.forwardRef<HTMLSpanElement>( (props: HTMLAttributes<HTMLSpanElement>, ref) => {
@@ -75,14 +96,9 @@ function generateValuesFile() {
       })
     }
     
-    const ${normalizationName} = {
-      ${AssetMetaList
-        .map(({variableName, name}) => `${variableName}: CreateIconComponent(${variableName}),\n`)
-        .reduce((text, value) => text + value, '')
-      }
-    }
+    const ${ExportName} = ${generateObjectCode(ExportValue)}
     
-    export default {${normalizationName}};
+    export default {${ExportName}};
   `;
   return template;
 }
