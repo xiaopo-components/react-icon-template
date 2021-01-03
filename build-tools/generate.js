@@ -77,14 +77,16 @@ import React from "react";
 import IconComponent, {IconProps} from '../component/icon-component';
 import Icon from '../assets/<%= SVG_FILENAME %>.svg';
 
-const <%= SVG_NAME %>: React.ForwardRefRenderFunction<HTMLSpanElement,IconProps> = (props, ref) => (
+const <%= SVG_NAME %> = React.ForwardRef<HTMLSpanElement,IconProps>((props, ref) => (
   <IconComponent 
       {...props} 
       ref={ref}
   >
     <Icon />
   </IconComponent>
-);
+));
+
+<%= SVG_NAME %>.displayName = '<%= SVG_NAME %>';
 
 export default <%= SVG_NAME %>;
   `);
