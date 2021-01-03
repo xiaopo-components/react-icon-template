@@ -1,12 +1,16 @@
-const config = require('./config');
-const fs = require('fs');
-const path = require('path');
-const _ = require('lodash');
-
+const config = require("./config");
+const fs = require("fs");
+const path = require("path");
+const _ = require("lodash");
 
 function getAssets() {
-  const assetList = fs.readdirSync(config.assetsPath).map(name => path.join(config.assetsPath, name));
-  if (assetList.length === 0) throw new Error(`asset dir is empty, check your config or dir "${config.assetsPath}"`);
+  const assetList = fs
+    .readdirSync(config.assetsPath)
+    .map((name) => path.join(config.assetsPath, name));
+  if (assetList.length === 0)
+    throw new Error(
+      `asset dir is empty, check your config or dir "${config.assetsPath}"`
+    );
   return assetList;
 }
 
@@ -21,7 +25,7 @@ function getFileMeta(context) {
     name,
     ext,
     variableName: NormalizationName(name),
-  }
+  };
 }
 
 /**
@@ -31,7 +35,7 @@ function getFileMeta(context) {
  */
 function getFileNameAndExt(context) {
   const match = context.match(/.*[\\|\/](.+?)\.(\w+)$/);
-  if (!match) throw new Error('input is not a file path');
+  if (!match) throw new Error("input is not a file path");
   const filename = match[1];
   const ext = match[2];
   return [filename, ext];
@@ -43,81 +47,80 @@ function getFileNameAndExt(context) {
  * @returns {any}
  */
 function NormalizationName(name) {
-  if (!name) throw new Error('invalid input, normalize name should input non-null value');
-  let normalizeName = name.replace(/[-|\\_](\w)/g, (all, letter) => letter.toUpperCase());
+  if (!name)
+    throw new Error(
+      "invalid input, normalize name should input non-null value"
+    );
+  let normalizeName = name.replace(/[-|\\_](\w)/g, (all, letter) =>
+    letter.toUpperCase()
+  );
   normalizeName = normalizeName[0].toUpperCase() + normalizeName.slice(1);
   return normalizeName;
 }
 
-function generateValuesFile() {
+function generateIcon() {
   const assetList = getAssets();
-  const AssetMetaList = assetList.map(getFileMeta).filter(({ext}) => ext.toLowerCase() === 'svg');
+  const AssetMetaList = assetList
+    .map(getFileMeta)
+    .filter(({ ext }) => ext.toLowerCase() === "svg");
 
-  let ExportName = NormalizationName(config.componentClassPrefix + 'IconAssets');
+  const iconFileTemplate = _.template(`
+// THIS FILE CREATE BY build-tools/generate.js
 
-  function getRelativePath(p) {
-    return path.relative(config.outputPath, p).replace(/\\/g, '/');
-  }
+import React from "react";
+/** 
+ *  if you want custom component name
+ *  you should modify template in 'build-tools/generate.js'
+ *  
+ *  if you want custom your icon component, only modify 'lib/component/icon-component.tsx'
+ */
+import IconComponent, {IconProps} from '../component/icon-component';
+import Icon from '../assets/<%= SVG_FILENAME %>.svg';
 
-  function generateObjectCode(value) {
-    return `{
-      ${Object.entries(value).reduce((p, [key, value]) => p += `${key}: ${value},\n`, '')}
-    \n}`
-  }
+const <%= SVG_NAME %>: React.ForwardRefRenderFunction<HTMLSpanElement,IconProps> = (props, ref) => (
+  <IconComponent 
+      {...props} 
+      ref={ref}
+  >
+    <Icon />
+  </IconComponent>
+);
 
-  const AssetsImportStatement = AssetMetaList.map(({path: p, variableName}) =>
-    `import ${variableName} from '${getRelativePath(p)}';`
+export default <%= SVG_NAME %>;
+  `);
+
+  AssetMetaList.forEach(({ variableName, name }) => {
+    const fileContent = iconFileTemplate({
+      SVG_NAME: variableName,
+      SVG_FILENAME: name,
+    }).trim();
+    fs.writeFileSync(
+      path.resolve(config.outputPath, `./${name}.tsx`).replace(/\\/g, "/"),
+      fileContent
+    );
+  });
+
+  const exportEntityList = AssetMetaList.map(
+    ({ variableName, name }) =>
+      `export {default as ${variableName}} from './${name}';`
   );
-
-  const CssImports = [
-    `import '${config.cssPath}'`,
-  ]
-
-  const ExportValue = AssetMetaList
-    .map(({variableName, name}) => ({[variableName]: `CreateIconComponent(${variableName})`}))
-    .reduce(((previousValue, currentValue) => Object.assign(previousValue, currentValue)), {})
-
-  const template = `
-    import React, {HTMLAttributes} from "react";
-    import classnames from 'classnames';
-    
-    ${[...AssetsImportStatement, ...CssImports].reduce((text, value) => text += value + '\n', '')}
-    
-    function CreateIconComponent(Component: React.FunctionComponent) {
-      return React.forwardRef<HTMLSpanElement>( (props: HTMLAttributes<HTMLSpanElement>, ref) => {
-        const {className, ...otherProps} = props;
-        return (
-          <span {...otherProps} className={classnames(
-            className,
-          )} ref={ref}> 
-            <Component />   
-          </span>
-        )
-      })
-    }
-    
-    const ${ExportName} = ${generateObjectCode(ExportValue)}
-    
-    export default {${ExportName}};
-  `;
-  return template;
+  fs.writeFileSync(
+    path.resolve(config.outputPath, `index.tsx`).replace(/\\/g, "/"),
+    exportEntityList.join("\n")
+  );
 }
 
-
-
-;(function main() {
-  const assets = getAssets();
+(function main() {
   // clear output
   try {
-    const outputFile = fs.readFileSync(config.outputPath);
-    console.log('output file exist, wait for delete');
+    const outputFile = fs.readdirSync(config.outputPath);
+    console.log("output path exist, wait for unlink");
     fs.unlinkSync(config.outputPath);
-    console.log('output file delete success');
+    fs.mkdirSync(config.outputPath);
+    console.log("output path delete success");
   } catch (e) {}
 
-  console.log('start generate output ');
-  const iconValueFileContent = generateValuesFile(assets[0]);
-
-  fs.writeFileSync(config.outputPath, iconValueFileContent);
-  console.log('success');
-})()
+  console.log("start generate output ");
+  generateIcon();
+  console.log("success");
+})();

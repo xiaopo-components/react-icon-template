@@ -1,11 +1,11 @@
-const path = require('path');
+const path = require("path");
 
-const resolveAppPath = (relativePath) => path.join(__dirname, '../src', relativePath);
+const resolveAppPath = (...relativePath) =>
+  path.join(__dirname, "../lib", ...relativePath).replace(/\\/g, "/");
 
 module.exports = {
-  componentClassPrefix: 'x-',
-  cssPath: path.relative('./src', './src/index.css'),
-  assetsPath: resolveAppPath('./assets'),
-  outputPath: resolveAppPath('.'),
-  filename: 'index.tsx',
-}
+  componentClassPrefix: "x",
+  assetsPath: resolveAppPath("./assets"),
+  outputPath: resolveAppPath("./icons"),
+  filename: "index.ts",
+};

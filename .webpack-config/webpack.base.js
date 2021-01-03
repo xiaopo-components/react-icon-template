@@ -1,44 +1,29 @@
-const path = require('path');
+const path = require("path");
 
 module.exports = {
-  entry: path.join(__dirname, `../src/index.tsx`),
-  target: 'web',
+  entry: path.join(__dirname, `../lib/index.tsx`),
+  target: "web",
   output: {
-    filename: 'bundle.[fullhash].js',
-    path: path.join(__dirname, '/dist')
+    filename: "index.js",
+    path: path.join(__dirname, "/src"),
   },
   module: {
     // 配置相应的规则
     rules: [
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      },
-      {
         test: /\.ts[x]?$/,
-        use: [
-          'babel-loader',
-          'ts-loader'
-        ],
-        exclude: /node_modules/
+        use: ["babel-loader", "ts-loader"],
+        exclude: /node_modules/,
       },
       {
         test: /\.svg$/,
-        include: path.resolve(__dirname, '../src/assets'),
-        use: ['@svgr/webpack'],
-      }
-    ]
+        include: path.resolve(__dirname, "../lib/assets"),
+        use: ["@svgr/webpack"],
+      },
+    ],
   },
   resolve: {
-    extensions: [
-      'js',
-      'ts',
-      'tsx',
-      'json',
-      'jsx',
-    ].map(e => `.${e}`)
+    extensions: ["js", "ts", "tsx", "json", "jsx"].map((e) => `.${e}`),
   },
-  plugins: [
-  ]
-
-}
+  plugins: [],
+};
