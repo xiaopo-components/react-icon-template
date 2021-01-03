@@ -10,13 +10,14 @@ import React from "react";
 import IconComponent, { IconProps } from "../component/icon-component";
 import Icon from "../assets/double-arrow-left.svg";
 
-const DoubleArrowLeft: React.ForwardRefRenderFunction<
-  HTMLSpanElement,
-  IconProps
-> = (props, ref) => (
-  <IconComponent {...props} ref={ref}>
-    <Icon />
-  </IconComponent>
+const DoubleArrowLeft = React.ForwardRef<HTMLSpanElement, IconProps>(
+  (props, ref) => (
+    <IconComponent {...props} ref={ref}>
+      <Icon />
+    </IconComponent>
+  )
 );
+
+DoubleArrowLeft.displayName = "IconDoubleArrowLeft";
 
 export default DoubleArrowLeft;

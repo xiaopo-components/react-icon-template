@@ -10,13 +10,12 @@ import React from "react";
 import IconComponent, { IconProps } from "../component/icon-component";
 import Icon from "../assets/done-all.svg";
 
-const DoneAll: React.ForwardRefRenderFunction<HTMLSpanElement, IconProps> = (
-  props,
-  ref
-) => (
+const DoneAll = React.ForwardRef<HTMLSpanElement, IconProps>((props, ref) => (
   <IconComponent {...props} ref={ref}>
     <Icon />
   </IconComponent>
-);
+));
+
+DoneAll.displayName = "IconDoneAll";
 
 export default DoneAll;

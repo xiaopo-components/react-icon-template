@@ -49,7 +49,7 @@
     "*.{js,css,json,md,ts,tsx}": [
       "npm run generate",
       "prettier --write",
-      "git add"
+      "git add *"
     ]
   }
 }

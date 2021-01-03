@@ -10,13 +10,12 @@ import React from "react";
 import IconComponent, { IconProps } from "../component/icon-component";
 import Icon from "../assets/question.svg";
 
-const Question: React.ForwardRefRenderFunction<HTMLSpanElement, IconProps> = (
-  props,
-  ref
-) => (
+const Question = React.ForwardRef<HTMLSpanElement, IconProps>((props, ref) => (
   <IconComponent {...props} ref={ref}>
     <Icon />
   </IconComponent>
-);
+));
+
+Question.displayName = "IconQuestion";
 
 export default Question;

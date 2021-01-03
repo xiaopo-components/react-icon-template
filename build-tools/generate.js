@@ -86,7 +86,7 @@ const <%= SVG_NAME %> = React.ForwardRef<HTMLSpanElement,IconProps>((props, ref)
   </IconComponent>
 ));
 
-<%= SVG_NAME %>.displayName = '<%= SVG_NAME %>';
+<%= SVG_NAME %>.displayName = 'Icon<%= SVG_NAME %>';
 
 export default <%= SVG_NAME %>;
   `);

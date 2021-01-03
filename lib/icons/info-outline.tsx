@@ -10,13 +10,14 @@ import React from "react";
 import IconComponent, { IconProps } from "../component/icon-component";
 import Icon from "../assets/info-outline.svg";
 
-const InfoOutline: React.ForwardRefRenderFunction<
-  HTMLSpanElement,
-  IconProps
-> = (props, ref) => (
-  <IconComponent {...props} ref={ref}>
-    <Icon />
-  </IconComponent>
+const InfoOutline = React.ForwardRef<HTMLSpanElement, IconProps>(
+  (props, ref) => (
+    <IconComponent {...props} ref={ref}>
+      <Icon />
+    </IconComponent>
+  )
 );
+
+InfoOutline.displayName = "IconInfoOutline";
 
 export default InfoOutline;

@@ -10,13 +10,14 @@ import React from "react";
 import IconComponent, { IconProps } from "../component/icon-component";
 import Icon from "../assets/keyboard-arrow-up.svg";
 
-const KeyboardArrowUp: React.ForwardRefRenderFunction<
-  HTMLSpanElement,
-  IconProps
-> = (props, ref) => (
-  <IconComponent {...props} ref={ref}>
-    <Icon />
-  </IconComponent>
+const KeyboardArrowUp = React.ForwardRef<HTMLSpanElement, IconProps>(
+  (props, ref) => (
+    <IconComponent {...props} ref={ref}>
+      <Icon />
+    </IconComponent>
+  )
 );
+
+KeyboardArrowUp.displayName = "IconKeyboardArrowUp";
 
 export default KeyboardArrowUp;

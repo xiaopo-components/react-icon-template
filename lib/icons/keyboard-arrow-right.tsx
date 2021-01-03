@@ -10,13 +10,14 @@ import React from "react";
 import IconComponent, { IconProps } from "../component/icon-component";
 import Icon from "../assets/keyboard-arrow-right.svg";
 
-const KeyboardArrowRight: React.ForwardRefRenderFunction<
-  HTMLSpanElement,
-  IconProps
-> = (props, ref) => (
-  <IconComponent {...props} ref={ref}>
-    <Icon />
-  </IconComponent>
+const KeyboardArrowRight = React.ForwardRef<HTMLSpanElement, IconProps>(
+  (props, ref) => (
+    <IconComponent {...props} ref={ref}>
+      <Icon />
+    </IconComponent>
+  )
 );
+
+KeyboardArrowRight.displayName = "IconKeyboardArrowRight";
 
 export default KeyboardArrowRight;
