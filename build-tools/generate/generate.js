@@ -111,20 +111,38 @@ export default <%= SVG_NAME %>;
     exportEntityList.join("\n")
   );
 }
+const rmdir = function(dir) {
+  const list = fs.readdirSync(dir);
+  for(let i = 0; i < list.length; i++) {
+    const filename = path.join(dir, list[i]);
+    const stat = fs.statSync(filename);
 
+    if(filename === "." || filename === "..") {
+      // pass these files
+    } else if(stat.isDirectory()) {
+      // rmdir recursively
+      rmdir(filename);
+    } else {
+      // rm filename
+      fs.unlinkSync(filename);
+    }
+  }
+  fs.rmdirSync(dir);
+};
 function generate() {
   // clear output
   try {
     const outputFile = fs.readdirSync(config.outputPath);
-    // "output path exist, wait for unlink"
-    fs.unlinkSync(config.outputPath);
+    // output path exist, wait for unlink
+    rmdir(config.outputPath);
+    // output path delete success
+  } catch (e) {} finally {
     fs.mkdirSync(config.outputPath);
-    // "output path delete success"
-  } catch (e) {}
+  }
 
-  // "start generate output "
+  // start generate output
   generateIcon();
-  // "success"
+  // success
 }
 
 module.exports = {

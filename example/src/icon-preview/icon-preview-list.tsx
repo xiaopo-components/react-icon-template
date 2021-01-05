@@ -1,5 +1,5 @@
 import * as React from "react";
-import { XIcon } from "../../../lib";
+import XIcon  from "../../../lib";
 import IconPreviewItem from "./icon-preview-item";
 
 const IconPreviewList = React.memo(() => {

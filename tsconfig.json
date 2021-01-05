@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
-    "outDir": "./src/", // 打包到的目录
-    "sourceMap": true, // 是否生成sourceMap（用于浏览器调试）
+    "outDir": "./src/",
+    "sourceMap": true,
     "noImplicitAny": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "declaration": true, // 是否生成声明文件
-    "declarationDir": "./types/", // 声明文件打包的位置
-    "declarationMap": true, // 是否生成声明文件map文件（便于调试）
+    "declaration": true,
+    "declarationDir": "./types/",
+    "declarationMap": true,
     "moduleResolution": "node",
     "module": "esnext",
-    "target": "es5", // 转化成的目标语言
+    "target": "es5",
     "baseUrl": "./lib",
     "types": ["node"],
     "typeRoots": ["./node_modules/@types"],

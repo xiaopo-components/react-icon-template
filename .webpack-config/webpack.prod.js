@@ -13,6 +13,18 @@ module.exports = WebpackMerge.merge(base, {
     // 采用通用模块定义
     libraryTarget: "umd",
   },
+  module: {
+    rules: [
+      {
+        test: /\.ts[x]?$/,
+        use: [
+          "babel-loader",
+          "ts-loader"
+        ],
+        exclude: /node_modules/,
+      },
+    ]
+  },
   plugins: [new CleanWebpackPlugin()],
   externals: {
     // 定义外部依赖，避免把react和react-dom打包进去
