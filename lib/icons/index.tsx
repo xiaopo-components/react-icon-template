@@ -1,7 +1,6 @@
 export { default as ChevronLeft } from "./chevron-left";
 export { default as Close } from "./close";
 export { default as ContentCopy } from "./content-copy";
-export { default as DoneAll } from "./done-all";
 export { default as Done } from "./done";
 export { default as DoubleArrowLeft } from "./double-arrow-left";
 export { default as DoubleArrowRight } from "./double-arrow-right";

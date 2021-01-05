@@ -8,7 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "declaration": true, // 是否生成声明文件
-    "declarationDir": "./src/types/", // 声明文件打包的位置
+    "declarationDir": "./types/", // 声明文件打包的位置
     "declarationMap": true, // 是否生成声明文件map文件（便于调试）
     "moduleResolution": "node",
     "module": "esnext",
@@ -17,7 +17,7 @@
     "types": ["node"],
     "typeRoots": ["./node_modules/@types"],
     "jsx": "react",
-    "lib": ["dom", "es2015"]
+    "lib": ["dom", "es2015", "esnext"]
   },
   "exclude": ["node_modules", "dist", "example"],
   "include": ["lib"]

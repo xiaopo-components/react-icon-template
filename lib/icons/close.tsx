@@ -10,7 +10,7 @@ import React from "react";
 import IconComponent, { IconProps } from "../component/icon-component";
 import Icon from "../assets/close.svg";
 
-const Close = React.ForwardRef<HTMLSpanElement, IconProps>((props, ref) => (
+const Close = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => (
   <IconComponent {...props} ref={ref}>
     <Icon />
   </IconComponent>

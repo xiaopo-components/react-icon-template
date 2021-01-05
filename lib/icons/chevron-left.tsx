@@ -10,7 +10,7 @@ import React from "react";
 import IconComponent, { IconProps } from "../component/icon-component";
 import Icon from "../assets/chevron-left.svg";
 
-const ChevronLeft = React.ForwardRef<HTMLSpanElement, IconProps>(
+const ChevronLeft = React.forwardRef<HTMLSpanElement, IconProps>(
   (props, ref) => (
     <IconComponent {...props} ref={ref}>
       <Icon />

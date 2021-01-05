@@ -77,7 +77,7 @@ import React from "react";
 import IconComponent, {IconProps} from '../component/icon-component';
 import Icon from '../assets/<%= SVG_FILENAME %>.svg';
 
-const <%= SVG_NAME %> = React.ForwardRef<HTMLSpanElement,IconProps>((props, ref) => (
+const <%= SVG_NAME %> = React.forwardRef<HTMLSpanElement,IconProps>((props, ref) => (
   <IconComponent 
       {...props} 
       ref={ref}
@@ -112,17 +112,21 @@ export default <%= SVG_NAME %>;
   );
 }
 
-(function main() {
+function generate() {
   // clear output
   try {
     const outputFile = fs.readdirSync(config.outputPath);
-    console.log("output path exist, wait for unlink");
+    // "output path exist, wait for unlink"
     fs.unlinkSync(config.outputPath);
     fs.mkdirSync(config.outputPath);
-    console.log("output path delete success");
+    // "output path delete success"
   } catch (e) {}
 
-  console.log("start generate output ");
+  // "start generate output "
   generateIcon();
-  console.log("success");
-})();
+  // "success"
+}
+
+module.exports = {
+  generate,
+};

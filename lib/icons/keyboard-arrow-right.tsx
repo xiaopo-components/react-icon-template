@@ -10,7 +10,7 @@ import React from "react";
 import IconComponent, { IconProps } from "../component/icon-component";
 import Icon from "../assets/keyboard-arrow-right.svg";
 
-const KeyboardArrowRight = React.ForwardRef<HTMLSpanElement, IconProps>(
+const KeyboardArrowRight = React.forwardRef<HTMLSpanElement, IconProps>(
   (props, ref) => (
     <IconComponent {...props} ref={ref}>
       <Icon />

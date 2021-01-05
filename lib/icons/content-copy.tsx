@@ -10,7 +10,7 @@ import React from "react";
 import IconComponent, { IconProps } from "../component/icon-component";
 import Icon from "../assets/content-copy.svg";
 
-const ContentCopy = React.ForwardRef<HTMLSpanElement, IconProps>(
+const ContentCopy = React.forwardRef<HTMLSpanElement, IconProps>(
   (props, ref) => (
     <IconComponent {...props} ref={ref}>
       <Icon />

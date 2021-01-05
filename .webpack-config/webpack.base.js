@@ -1,4 +1,5 @@
 const path = require("path");
+const IconGeneratePlugin = require("../build-tools/generate/plugin");
 
 module.exports = {
   entry: path.join(__dirname, `../lib/index.tsx`),
@@ -12,7 +13,15 @@ module.exports = {
     rules: [
       {
         test: /\.ts[x]?$/,
-        use: ["babel-loader", "ts-loader"],
+        use: [
+          "babel-loader",
+          {
+            loader: "ts-loader",
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
         exclude: /node_modules/,
       },
       {
@@ -25,5 +34,5 @@ module.exports = {
   resolve: {
     extensions: ["js", "ts", "tsx", "json", "jsx"].map((e) => `.${e}`),
   },
-  plugins: [],
+  plugins: [new IconGeneratePlugin()],
 };

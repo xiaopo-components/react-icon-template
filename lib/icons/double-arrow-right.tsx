@@ -10,7 +10,7 @@ import React from "react";
 import IconComponent, { IconProps } from "../component/icon-component";
 import Icon from "../assets/double-arrow-right.svg";
 
-const DoubleArrowRight = React.ForwardRef<HTMLSpanElement, IconProps>(
+const DoubleArrowRight = React.forwardRef<HTMLSpanElement, IconProps>(
   (props, ref) => (
     <IconComponent {...props} ref={ref}>
       <Icon />
