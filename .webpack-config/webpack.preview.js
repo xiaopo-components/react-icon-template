@@ -34,6 +34,5 @@ module.exports = WebpackMerge.merge(base, {
     new HtmlWebpackPlugin({
       template: "./example/index.html",
     }),
-    new IconGeneratePlugin()
   ],
 });

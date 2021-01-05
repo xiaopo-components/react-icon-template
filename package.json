@@ -1,14 +1,22 @@
 {
   "name": "@x-component/icon",
   "version": "0.0.1",
-  "description": "icon collections for x-component",
+  "description": "icon collections",
   "main": "src/index.js",
   "module": "src/index.js",
   "types": "types/index.d.ts",
   "scripts": {
-    "generate": "node build-tools/generate",
-    "build": "node build-tools/generate/generate.js && webpack-cli --config .webpack-config/webpack.prod.js",
+    "build": "webpack-cli --config .webpack-config/webpack.prod.js",
     "preview": " webpack-cli serve --config .webpack-config/webpack.preview.js"
+  },
+  "files": [
+    "src",
+    "types",
+    "package.json"
+  ],
+  "directories": {
+    "lib": "src",
+    "doc": "README.md"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.8",
@@ -60,7 +68,6 @@
   },
   "lint-staged": {
     "*.{js,css,json,md,ts,tsx}": [
-      "npm run generate",
       "prettier --write",
       "git add *"
     ]

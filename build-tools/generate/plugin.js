@@ -28,15 +28,17 @@ class IconGeneratePlugin {
 
   stop() {
     if (this.assetsWatcher) {
-      this.assetsWatcher.close().then(() => {
-        console.log("icon generate plugin stop works");
-      });
+      this.assetsWatcher.close();
+      this.assetsWatcher = null;
     }
   }
 
   apply(compiler) {
-    compiler.hooks.afterPlugins.tap("IconGeneratePlugin", (param) => {
+    compiler.hooks.afterPlugins.tap("IconGeneratePlugin", () => {
       this.start();
+    });
+    compiler.hooks.done.tap("IconGeneratePlugin", () => {
+      if (compiler.options.mode !== "development") this.stop();
     });
   }
 }
