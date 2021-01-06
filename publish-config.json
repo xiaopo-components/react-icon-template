@@ -1,9 +1,6 @@
 {
-  "username": "xiaopo",
-  "password": "xiaopo0911",
-  "email": "wly19960911@gmail.com",
-  "registry": "http://localhost:4873/",
-  "scope": "",
-  "quotes": false,
-  "configPath": ""
+  "username": "",
+  "password": "",
+  "email": "",
+  "registry": ""
 }

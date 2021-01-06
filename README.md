@@ -16,8 +16,8 @@
    - `license` (_optional_)
 
 3. 在 `lib/assets` (default) 添加 `svg` 并且运行 `npm run preview`, 查看生成效果。
-
-4. 运行 `npm run publish` 发布 `package` 到 `registry`
+4. 配置 `publish-config.json`
+5. 运行 `npm run build:publish` 发布 `package` 到 `registry`
 
 ### Plugin config
 
@@ -25,8 +25,10 @@
 
 ```json5
 {
-  componentClassName: "icon", // default value is 'icon'
-  assetsPath: "./lib/assets", // relative path
+  componentClassName: "icon",
+  // default value is 'icon'
+  assetsPath: "./lib/assets",
+  // relative path
 }
 ```
 
