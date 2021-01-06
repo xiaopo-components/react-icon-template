@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack-cli --config .webpack-config/webpack.prod.js",
-    "preview": " webpack-cli serve --config .webpack-config/webpack.preview.js"
+    "build:publish": "npm run build & node build-tools/publish"
   },
   "files": [
     "src",
@@ -40,7 +40,6 @@
     "clean-webpack-plugin": "^3.0.0",
     "copy-to-clipboard": "^3.3.1",
     "css-loader": "^5.0.1",
-    "file-loader": "^6.2.0",
     "html-loader": "^1.3.2",
     "html-webpack-plugin": "^5.0.0-beta.4",
     "husky": "^4.3.6",
