@@ -19,6 +19,21 @@
 4. 配置 `publish-config.json`
 5. 运行 `npm run build:publish` 发布 `package` 到 `registry`
 
+### Example
+
+```tsx
+import Icon from "your-package-name";
+import ReactDom from "react-dom";
+import React from "react";
+
+ReactDom.render(
+  <div>
+    <Icon.Loading />
+  </div>,
+  document.getElementById("root")
+);
+```
+
 ### Plugin config
 
 当前项目的生成方式是采用 `build-tools/generate/plugin.js` 的 webpack plugin 生成的，可以进行简单的配置
