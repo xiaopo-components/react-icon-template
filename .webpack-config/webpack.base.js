@@ -34,5 +34,5 @@ module.exports = {
   resolve: {
     extensions: ["js", "ts", "tsx", "json", "jsx"].map((e) => `.${e}`),
   },
-  plugins: [new IconGeneratePlugin()],
+  plugins: [new IconGeneratePlugin({})],
 };

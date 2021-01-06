@@ -3,6 +3,7 @@ import * as ReactDom from "react-dom";
 import App from "./app";
 
 import "./index.scss";
+import "./icon.scss";
 import { BrowserRouter } from "react-router-dom";
 
 ReactDom.render(

@@ -1,28 +1,36 @@
 const chokidar = require("chokidar");
-const generatorConfig = require("./config");
+const defaultConfig = require("./config");
 const iconGenerator = require("./generate");
 const _ = require("lodash");
-
-const Generate = _.debounce(() => {
-  iconGenerator.generate();
-  console.log(`----------------------------------
-  icon re-generated and good-luck
-----------------------------------`);
-}, 50);
 
 // watch assets change and re-generate
 class IconGeneratePlugin {
   assetsWatcher;
 
+  config;
+
+  constructor(config) {
+    this.config = Object.assign({}, defaultConfig, config ?? {});
+  }
+
+  generate = _.debounce(() => {
+    iconGenerator.generate(this.config);
+    console.log(`
+----------------------------------
+ icon re-generated and good-luck
+----------------------------------
+`);
+  }, 50);
+
   start() {
-    this.assetsWatcher = chokidar.watch(generatorConfig.assetsPath, {
+    this.assetsWatcher = chokidar.watch(this.config.assetsPath, {
       ignored: /^\./,
       persistent: true,
     });
     this.assetsWatcher
-      .on("add", Generate)
-      .on("change", Generate)
-      .on("unlink", Generate);
+      .on("add", this.generate)
+      .on("change", this.generate)
+      .on("unlink", this.generate);
     console.log("icon generate plugin start works");
   }
 

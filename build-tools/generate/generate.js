@@ -1,15 +1,18 @@
-const config = require("./config");
+const defaultConfig = require("./config");
 const fs = require("fs");
 const path = require("path");
 const _ = require("lodash");
 
-function getAssets() {
+const resolveAppPath = (...relativePath) =>
+  path.join(__dirname, "../../", ...relativePath).replace(/\\/g, "/");
+
+function getAssets(assetsPath) {
   const assetList = fs
-    .readdirSync(config.assetsPath)
-    .map((name) => path.join(config.assetsPath, name));
+    .readdirSync(assetsPath)
+    .map((name) => path.join(assetsPath, name));
   if (assetList.length === 0)
     throw new Error(
-      `asset dir is empty, check your config or dir "${config.assetsPath}"`
+      `asset dir is empty, check your config or dir "${assetsPath}"`
     );
   return assetList;
 }
@@ -58,8 +61,10 @@ function NormalizationName(name) {
   return normalizeName;
 }
 
-function generateIcon() {
-  const assetList = getAssets();
+function generateIcon(config) {
+  const outputPath = resolveAppPath(config.outputPath);
+  const assetsPath = resolveAppPath(config.assetsPath);
+  const assetList = getAssets(assetsPath);
   const AssetMetaList = assetList
     .map(getFileMeta)
     .filter(({ ext }) => ext.toLowerCase() === "svg");
@@ -76,10 +81,12 @@ import React from "react";
  */
 import IconComponent, {IconProps} from '../component/icon-component';
 import Icon from '../assets/<%= SVG_FILENAME %>.svg';
+import classnames from "classnames";
 
 const <%= SVG_NAME %> = React.forwardRef<HTMLSpanElement,IconProps>((props, ref) => (
   <IconComponent 
       {...props} 
+      className={classnames('<%= CLASS_NAME %>', props.className)}
       ref={ref}
   >
     <Icon />
@@ -95,9 +102,10 @@ export default <%= SVG_NAME %>;
     const fileContent = iconFileTemplate({
       SVG_NAME: variableName,
       SVG_FILENAME: name,
+      CLASS_NAME: config.componentClassName,
     }).trim();
     fs.writeFileSync(
-      path.resolve(config.outputPath, `./${name}.tsx`).replace(/\\/g, "/"),
+      path.resolve(outputPath, `./${name}.tsx`).replace(/\\/g, "/"),
       fileContent
     );
   });
@@ -107,19 +115,21 @@ export default <%= SVG_NAME %>;
       `export {default as ${variableName}} from './${name}';`
   );
   fs.writeFileSync(
-    path.resolve(config.outputPath, `index.tsx`).replace(/\\/g, "/"),
+    path.resolve(outputPath, `index.tsx`).replace(/\\/g, "/"),
     exportEntityList.join("\n")
   );
 }
-const rmdir = function(dir) {
+
+// delete dir
+const rmdir = function (dir) {
   const list = fs.readdirSync(dir);
-  for(let i = 0; i < list.length; i++) {
+  for (let i = 0; i < list.length; i++) {
     const filename = path.join(dir, list[i]);
     const stat = fs.statSync(filename);
 
-    if(filename === "." || filename === "..") {
+    if (filename === "." || filename === "..") {
       // pass these files
-    } else if(stat.isDirectory()) {
+    } else if (stat.isDirectory()) {
       // rmdir recursively
       rmdir(filename);
     } else {
@@ -129,19 +139,25 @@ const rmdir = function(dir) {
   }
   fs.rmdirSync(dir);
 };
-function generate() {
+function generate(inputConfig) {
+  // outputPath is not custom
+  delete inputConfig.outputPath;
+
+  const config = Object.assign({}, defaultConfig, inputConfig ?? {});
   // clear output
+  const output = resolveAppPath(config.outputPath);
   try {
-    const outputFile = fs.readdirSync(config.outputPath);
+    const outputFile = fs.readdirSync(output);
     // output path exist, wait for unlink
-    rmdir(config.outputPath);
+    rmdir(output);
     // output path delete success
-  } catch (e) {} finally {
-    fs.mkdirSync(config.outputPath);
+  } catch (e) {
+  } finally {
+    fs.mkdirSync(output);
   }
 
   // start generate output
-  generateIcon();
+  generateIcon(config);
   // success
 }
 
