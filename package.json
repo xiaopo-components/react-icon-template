@@ -1,5 +1,5 @@
 {
-  "name": "@xiaopo/icon",
+  "name": "@xiaopo/react-icon",
   "version": "0.0.1",
   "description": "icon collections",
   "main": "src/index.js",

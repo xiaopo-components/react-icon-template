@@ -1,4 +1,4 @@
-## IconPackageTemplate
+## ReactIconPackageTemplate
 
 该项目是简单的 `Icon package project`， 可以简单生成自己的 `react-icon-component`. 你可以 `fork` 并且修改之后发布自己的 `icon-component package`
 
@@ -15,7 +15,7 @@
    - `author`
    - `license` (_optional_)
 
-3. 在 `lib/assets` (default) 添加 `svg` 并且运行 `npm run preview`, 调整样式。
+3. 在 `lib/assets` (default) 添加 `svg` 并且运行 `npm run preview`, 查看生成效果。
 
 4. 运行 `npm run publish` 发布 `package` 到 `registry`
 
