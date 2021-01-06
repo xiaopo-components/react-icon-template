@@ -1,5 +1,5 @@
 {
-  "name": "@xiaopo/react-icon",
+  "name": "react-icon-template",
   "version": "0.0.1",
   "description": "icon collections",
   "main": "src/index.js",
